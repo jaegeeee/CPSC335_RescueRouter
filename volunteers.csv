@@ -1,0 +1,6 @@
+# volunteer_id,volunteer_name,vehicle_capacity,area,available_from,available_until,max_pickups
+V-301,Alicia Reyes,100,North,16:00,21:00,3
+V-302,Marcus Webb,60,Central,17:00,20:00,2
+V-303,Priya Nair,150,Central,16:30,22:00,2
+V-304,Tom Okafor,40,South,18:00,22:00,2
+V-305,Ander Dingus,12, North,18:30,21:00,1
