@@ -1,0 +1,92 @@
+[
+  {
+    "donation_id": "D-1001",
+    "donor_name": "Sunrise Cafe",
+    "food_type": "prepared",
+    "quantity": 40,
+    "ready_time": "17:00",
+    "shelf_life_minutes": 180,
+    "area": "North"
+  },
+  {
+    "donation_id": "D-1002",
+    "donor_name": "Green Grocer Market",
+    "food_type": "produce",
+    "quantity": 90,
+    "ready_time": "17:15",
+    "shelf_life_minutes": 240,
+    "area": "Central"
+  },
+  {
+    "donation_id": "D-1003",
+    "donor_name": "Campus Catering Services",
+    "food_type": "prepared",
+    "quantity": 55,
+    "ready_time": "17:30",
+    "shelf_life_minutes": 150,
+    "area": "Central"
+  },
+  {
+    "donation_id": "D-1004",
+    "donor_name": "Bayview Bakery",
+    "food_type": "bakery",
+    "quantity": 30,
+    "ready_time": "17:45",
+    "shelf_life_minutes": 300,
+    "area": "North"
+  },
+  {
+    "donation_id": "D-1005",
+    "donor_name": "Harbor Street Market",
+    "food_type": "dairy",
+    "quantity": 35,
+    "ready_time": "18:00",
+    "shelf_life_minutes": 90,
+    "area": "South"
+  },
+  {
+    "donation_id": "D-1006",
+    "donor_name": "Metro Deli",
+    "food_type": "prepared",
+    "quantity": 70,
+    "ready_time": "18:00",
+    "shelf_life_minutes": 180,
+    "area": "Central"
+  },
+  {
+    "donation_id": "D-1007",
+    "donor_name": "Fresh Fields Produce",
+    "food_type": "produce",
+    "quantity": 40,
+    "ready_time": "18:15",
+    "shelf_life_minutes": 200,
+    "area": "South"
+  },
+  {
+    "donation_id": "D-1008",
+    "donor_name": "Corner Canteen",
+    "food_type": "canned",
+    "quantity": 25,
+    "ready_time": "18:00",
+    "shelf_life_minutes": 240,
+    "area": "North"
+  },
+  {
+    "donation_id": "D-1009",
+    "donor_name": "Lakeside Caterers",
+    "food_type": "prepared",
+    "quantity": 80,
+    "ready_time": "18:15",
+    "shelf_life_minutes": 45,
+    "area": "Central"
+  },
+  {
+    "donation_id": "D-1010",
+    "donor_name": "Orchard Co-op",
+    "food_type": "produce",
+    "quantity": 45,
+    "ready_time": "19:00",
+    "shelf_life_minutes": 150,
+    "area": "Central"
+  }
+]
