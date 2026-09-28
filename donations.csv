@@ -1,11 +1,21 @@
-# donation_id,donor_name,food_type,quantity,ready_time,shelf_life_minutes,area
-D-1001,Sunrise Cafe,prepared,40,17:00,180,North
-D-1002,Green Grocer Market,produce,90,17:15,240,Central
-D-1003,Campus Catering Services,prepared,55,17:30,150,Central
-D-1004,Bayview Bakery,bakery,30,17:45,300,North
-D-1005,Harbor Street Market,dairy,35,18:00,90,South
-D-1006,Metro Deli,prepared,70,18:00,180,Central
-D-1007,Fresh Fields Produce,produce,40,18:15,200,South
-D-1008,Corner Canteen,canned,25,18:00,240,North
-D-1009,Lakeside Caterers,prepared,80,18:15,45,Central
-D-1010,Orchard Co-op,produce,45,19:00,150,Central
+donation_ID,donor_name,food_type,quantity,ready_time,shelf_life_minutes,pickup_area
+D-1018,Harbor Street Market,prepared,20,17:45,45,Central,
+D-1009,Lakeside Caterers,prepared,80,18:15,45,Central,
+D-1005,Harbor Street Market,dairy,35,18:00,90,South,
+D-1014,Corner Canteen,produce,45,18:00,90,South,
+D-1020,Corner Canteen,dairy,50,16:00,150,North,
+D-1003,Campus Catering Services,prepared,55,17:30,150,Central,
+D-1012,Harbor Street Market,prepared,35,17:30,150,South,
+D-1019,Metro Deli,bakery,60,18:00,150,South,
+D-1001,Sunrise Cafe,prepared,40,17:00,180,North,
+D-1006,Metro Deli,prepared,70,18:00,180,Central,
+D-1015,Fresh Fields Produce,prepared,70,18:00,180,Central,
+D-1010,Orchard Co-op,bakery,45,19:00,180,Central,
+D-1017,Bayview Bakery,produce,35,17:30,200,South,
+D-1007,Fresh Fields Produce,produce,40,18:15,200,South,
+D-1002,Green Grocer Market,produce,90,17:15,240,Central,
+D-1011,Bayview Bakery,dairy,15,17:15,240,South,
+D-1016,Lakeside Caterers,canned,20,17:15,240,South,
+D-1008,Corner Canteen,canned,25,18:00,240,North,
+D-1004,Bayview Bakery,bakery,30,17:45,300,North,
+D-1013,Metro Deli,canned,60,17:45,300,North,

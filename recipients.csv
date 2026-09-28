@@ -1,6 +1,6 @@
-#recipient_id,organization_name,accepted_food_types,capacity,area,closing_time
-R-201,Hope Community Shelter,prepared;bakery,150,North,21:00
-R-202,Eastside Food Pantry,produce;canned;bakery,200,Central,20:00
-R-203,Riverside Community Fridge,produce;dairy,80,South,22:00
-R-204,St. Annes Kitchen,prepared;produce;dairy,250,Central,19:30
+recipient_ID,organization_name,accepted_food_types,capacity,pickup_area,closing_time
 R-205,Northgate Youth Center,bakery;canned,60,North,18:30
+R-204,St. Annes Kitchen,prepared;produce;dairy,250,Central,19:30
+R-202,Eastside Food Pantry,produce;canned;bakery,200,Central,20:00
+R-201,Hope Community Shelter,prepared;bakery,150,North,21:00
+R-203,Riverside Community Fridge,produce;dairy,80,South,22:00

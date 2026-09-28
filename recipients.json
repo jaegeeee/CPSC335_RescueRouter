@@ -1,17 +1,17 @@
 [
   {
-    "recipient_id": "R-201",
+    "recipient_ID": "R-201",
     "organization_name": "Hope Community Shelter",
     "accepted_food_types": [
       "prepared",
       "bakery"
     ],
     "capacity": 150,
-    "area": "North",
+    "pickup_area": "North",
     "closing_time": "21:00"
   },
   {
-    "recipient_id": "R-202",
+    "recipient_ID": "R-202",
     "organization_name": "Eastside Food Pantry",
     "accepted_food_types": [
       "produce",
@@ -19,22 +19,22 @@
       "bakery"
     ],
     "capacity": 200,
-    "area": "Central",
+    "pickup_area": "Central",
     "closing_time": "20:00"
   },
   {
-    "recipient_id": "R-203",
+    "recipient_ID": "R-203",
     "organization_name": "Riverside Community Fridge",
     "accepted_food_types": [
       "produce",
       "dairy"
     ],
     "capacity": 80,
-    "area": "South",
+    "pickup_area": "South",
     "closing_time": "22:00"
   },
   {
-    "recipient_id": "R-204",
+    "recipient_ID": "R-204",
     "organization_name": "St. Annes Kitchen",
     "accepted_food_types": [
       "prepared",
@@ -42,18 +42,18 @@
       "dairy"
     ],
     "capacity": 250,
-    "area": "Central",
+    "pickup_area": "Central",
     "closing_time": "19:30"
   },
   {
-    "recipient_id": "R-205",
+    "recipient_ID": "R-205",
     "organization_name": "Northgate Youth Center",
     "accepted_food_types": [
       "bakery",
       "canned"
     ],
     "capacity": 60,
-    "area": "North",
+    "pickup_area": "North",
     "closing_time": "18:30"
   }
 ]
