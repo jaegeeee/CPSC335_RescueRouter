@@ -10,13 +10,13 @@ Test data for the RescueRoute project.
 
 | Field | Type | Notes |
 |---|---|---|
-| `donation_id` | string | Unique, format `D-####` |
+| `donation_ID` | string | Unique, format `D-####` |
 | `donor_name` | string | |
 | `food_type` | string | One of: `prepared`, `produce`, `bakery`, `dairy`, `canned` |
 | `quantity` | integer | Arbitrary units |
 | `ready_time` | `HH:MM` | 24-hour, same simulated day |
 | `shelf_life_minutes` | integer | Minutes from `ready_time` until it expires |
-| `area` | string | `North`, `Central`, `South` |
+| `pickup_area` | string | `North`, `Central`, `South` |
 
 Expiry is derived: `expires_at = ready_time + shelf_life_minutes`.
 
@@ -27,21 +27,21 @@ Storing shelf life rather than an absolute `expires_at` matches the project desc
 
 | Field | Type | Notes |
 |---|---|---|
-| `recipient_id` | string | `R-###` |
+| `recipient_ID` | string | `R-###` |
 | `organization_name` | string | |
 | `accepted_food_types` | string | **Semicolon**-separated; parse to a `set` |
 | `capacity` | integer | Total, depletes as donations are assigned |
-| `area` | string | |
+| `pickup_area` | string | |
 | `closing_time` | `HH:MM` | Nothing can be delivered after this |
 
 ### volunteers
 
 | Field | Type | Notes |
 |---|---|---|
-| `volunteer_id` | string | `V-###` |
+| `volunteer_ID` | string | `V-###` |
 | `volunteer_name` | string | |
 | `vehicle_capacity` | integer | Per-pickup limit |
-| `area` | string | |
+| `pickup_area` | string | |
 | `available_from` / `available_until` | `HH:MM` | |
 | `max_pickups` | integer | Total pickups across the run |
 
