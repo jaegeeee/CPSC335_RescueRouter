@@ -51,16 +51,31 @@ class RescueRouterTest(unittest.TestCase):
         self.assertEqual(f"{a['scheduled_time']:%H:%M}", "17:00")  # max(ready 17:00, available 16:00)
         self.assertEqual(a["status"], "assigned")
 
-    # 2. Duplicate donation ID
-    def test_duplicate_donation_id_keeps_one_record(self):
-        self.load([
-            "D-1,Cafe,prepared,40,17:00,180,North",
-            "D-1,Cafe Copy,prepared,99,17:00,180,North",
-        ])
-        self.assertEqual(len(rr.Donations), 1)
+    # 2a. Duplicate donation ID in one file: detected, reported, first record kept
+    def test_duplicate_donation_id_is_detected_and_first_record_kept(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            self.load([
+                "D-1,Cafe,prepared,40,17:00,180,North",
+                "D-1,Cafe Copy,prepared,99,17:00,180,North",
+            ])
+
+        self.assertIn("Removed duplicate donations (first record kept): ['D-1']", output.getvalue())
+        self.assertEqual(rr.Donations["D-1"]["donor_name"], "Cafe")
+        self.assertEqual(rr.Donations["D-1"]["quantity"], 40)
         assignments, _ = rr.FIFO_sort()
-        # The duplicate must not be delivered twice.
-        self.assertEqual([a["donation_ID"] for a in assignments].count("D-1"), 1)
+        self.assertEqual(sum(a["delivery_quantity"] for a in assignments), 40)
+
+    # 2b. Duplicate donation ID across uploads: a second file cannot overwrite the first
+    def test_duplicate_across_uploads_does_not_overwrite(self):
+        self.load(["D-1,Cafe,prepared,40,17:00,180,North"])
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            rr.clean_uploaded_data(self.write_csv("d2.csv", DONATION_HEADER, ["D-1,Imposter,prepared,99,17:00,180,North"]), 1)
+
+        self.assertIn("['D-1']", output.getvalue())
+        self.assertEqual(rr.Donations["D-1"]["donor_name"], "Cafe")
+        self.assertEqual(rr.Donations["D-1"]["quantity"], 40)
 
     # 3a. Already expired donation
     def test_expired_donation_is_not_assigned(self):
