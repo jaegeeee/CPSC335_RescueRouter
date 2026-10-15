@@ -54,3 +54,20 @@ Storing shelf life rather than an absolute `expires_at` matches the project desc
    capacity ≥ quantity · volunteer `vehicle_capacity` ≥ quantity · volunteer
    under `max_pickups` · `scheduled_time ≤ expires_at` · `≤ closing_time` ·
    `≤ available_until`
+
+
+Your README must state the greedy rule precisely. For example:
+
+First schedule donations with the least remaining shelf life. If two donations have equal remaining shelf life, schedule the larger quantity first. If still tied, choose the donation with the earlier arrival time.
+
+You are not required to prove that your greedy strategy is globally optimal. You are required to explain:
+
+What your rule optimizes locally.
+
+Why the rule is reasonable.
+
+Where the rule may fail.
+
+What fairness, starvation, or trade-off concerns may result.
+
+
