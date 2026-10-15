@@ -2,6 +2,8 @@
 import os
 import tempfile
 import unittest
+import io
+import contextlib
 
 import RR as rr
 
@@ -200,8 +202,15 @@ class RescueRouterTest(unittest.TestCase):
         starved = unmatched[0]
         self.assertEqual(starved["donation_ID"], "D-1")
         self.assertEqual(starved["status"], "unassigned")
-        self.assertEqual(starved["priority_reason"], "priority position 2: scheduled after D-2 with shorter shelf life")
-        self.assertTrue(starved["decision_reason"])
+        self.assertEqual(
+            starved["priority_reason"],
+            "Donation D-1 was considered 2 of 2, after D-2, because D-2 had less remaining shelf life "
+            "(60 vs 300 minutes) under the urgency-first greedy rule.",
+        )
+        self.assertEqual(
+            starved["decision_reason"],
+            "Donation D-1 (40 items) could not be assigned because recipient has no remaining capacity.",
+        )
 
     # Sanity check on the real project data: nothing created or lost
     def test_project_data_quantities_reconcile(self):
