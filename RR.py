@@ -113,20 +113,13 @@ def display_history(temp_assignment, temp_unassigned_donations, label):
     else:
         print("Assigned Donations:")
         for assigned in temp_assignment:
-            recipient = Recipients[assigned["recipient_ID"]]
-            volunteer = Volunteers[assigned["volunteer_ID"]]
-            print(
-                f"Donation {assigned['donation_ID']} was assigned to"
-                f" {recipient['organization_name']} with volunteer {volunteer['volunteer_name']} at {assigned['scheduled_time']:%H:%M},"
-                f" with quantity: {assigned['delivery_quantity']} items."
-                f" Priority: {assigned['priority_reason']}"
-            )
+            print(f"\nAssigned: {assigned['decision_reason']}")
+            print(f"  Order: {assigned['priority_reason']}")
     if temp_unassigned_donations:
         print("\nUnassigned Donations:")
         for unassigned in temp_unassigned_donations:
-            print(
-                f"Donation: {unassigned['donation_ID']} with remaining quantity: {unassigned['quantity']} could not be assigned because no compatible recipient or volunteer available"
-            )
+            print(f"\n{unassigned['status'].capitalize()}: {unassigned['decision_reason']}")
+            print(f"  Order: {unassigned['priority_reason']}")
 
 
 def candidate_reasons(donation, recipient, volunteer): #this function calculates the scheduled time for a donation and explains why a match with a recipient and volunteer might be infeasible
@@ -165,21 +158,30 @@ def priority_reasons(donations, strategy): #this function describes each donatio
     reasons = {}
     for index, donation in enumerate(donations):
         donation_id = donation["donation_ID"]
+        position = f"Donation {donation_id} was considered {index + 1} of {len(donations)}"
         if strategy == "FIFO":
-            reasons[donation_id] = f"FIFO position {index + 1}, ordered by ready time"
-        elif index == 0:
-            reasons[donation_id] = (
-                f"shortest shelf life first ({donation['shelf_life_minutes']} minutes)"
-            )
-        else:
-            previous = donations[index - 1]
-            if donation["shelf_life_minutes"] == previous["shelf_life_minutes"]:
-                detail = f"shelf life tied; ready time follows {previous['donation_ID']}"
+            rule = "under the first-in-first-out rule"
+            if index == 0:
+                reasons[donation_id] = f"{position} because it was ready earliest ({donation['ready_time']:%H:%M}) {rule}."
             else:
-                detail = f"scheduled after {previous['donation_ID']} with shorter shelf life"
-            reasons[donation_id] = (
-                f"priority position {index + 1}: {detail}"
-            )
+                previous = donations[index - 1]
+                if donation["ready_time"] == previous["ready_time"]:
+                    detail = f"it was ready at the same time as {previous['donation_ID']} ({donation['ready_time']:%H:%M}), so file order was kept"
+                else:
+                    detail = f"{previous['donation_ID']} was ready earlier ({previous['ready_time']:%H:%M} vs {donation['ready_time']:%H:%M})"
+                reasons[donation_id] = f"{position}, after {previous['donation_ID']}, because {detail} {rule}."
+        else:
+            rule = "under the urgency-first greedy rule"
+            if index == 0:
+                reasons[donation_id] = f"{position} because it had the least shelf life ({donation['shelf_life_minutes']} minutes) {rule}."
+            else:
+                previous = donations[index - 1]
+                if donation["shelf_life_minutes"] == previous["shelf_life_minutes"]:
+                    detail = f"it had the same shelf life as {previous['donation_ID']} ({donation['shelf_life_minutes']} minutes), so file order was kept"
+                else:
+                    detail = (f"{previous['donation_ID']} had less remaining shelf life "
+                              f"({previous['shelf_life_minutes']} vs {donation['shelf_life_minutes']} minutes)")
+                reasons[donation_id] = f"{position}, after {previous['donation_ID']}, because {detail} {rule}."
     return reasons #at the end it returns a dictionary mapping each donation's ID to its priority explanation
 
 def assign(sort_type, sorted_Donations, sorted_Recipients, sorted_Volunteers):
@@ -201,29 +203,37 @@ def assign(sort_type, sorted_Donations, sorted_Recipients, sorted_Volunteers):
                 for volunteer in sorted_Volunteers:
                     scheduled_time, reasons, expires_at = candidate_reasons(donation, recipient, volunteer)
                     if reasons:
-                        rejection_reasons.update(reasons)
+                        if donation["pickup_area"] == recipient["pickup_area"] == volunteer["pickup_area"]: #reasons from other areas would add noise to the explanation, simplifying for readability
+                            rejection_reasons.update(reasons)
                         continue
                     quantity = min(donation["quantity"], volunteer["vehicle_capacity"], recipient["capacity"])
+                    minutes_left = int((expires_at - scheduled_time).total_seconds() // 60)
+                    organization = recipient["organization_name"]
+                    explanation = (
+                        f"Donation {donation['donation_ID']} was assigned to {organization} with volunteer "
+                        f"{volunteer['volunteer_name']} ({volunteer['volunteer_ID']}) at {scheduled_time:%H:%M} for {quantity} items "
+                        f"because it expires in {minutes_left} minutes (at {expires_at:%H:%M}), "
+                        f"{organization} accepts {donation['food_type']} and has room for {recipient['capacity']} more items "
+                        f"before closing at {recipient['closing_time']:%H:%M}, and the volunteer is available until "
+                        f"{volunteer['available_until']:%H:%M} and can carry {volunteer['vehicle_capacity']} items per pickup."
+                    )
+                    if quantity < donation["quantity"]:
+                        limit = "the vehicle capacity" if quantity == volunteer["vehicle_capacity"] else "the recipient's remaining capacity"
+                        explanation += f" This pickup carries {quantity} of the {donation['quantity']} remaining items, limited by {limit}."
                     assignments.append({
                         "donation_ID": donation["donation_ID"],
                         "recipient_ID": recipient["recipient_ID"],
                         "volunteer_ID": volunteer["volunteer_ID"],
                         "scheduled_time": scheduled_time,
                         "delivery_quantity": quantity,
-                        "decision_reason": (
-                            f"scheduled at {scheduled_time:%H:%M}, before expiry at "
-                            f"{expires_at:%H:%M}; the food type is accepted and capacity is available"
-                        ),
+                        "decision_reason": explanation,
                         "priority_reason": priorities[donation["donation_ID"]],
                         "status": "assigned",
                     })
-                    
+
+                    #used up recipients and volunteers sray in the lists so later donations get "no remaining capactiy" for reason
                     recipient["capacity"] -= quantity #decrease the recipient's capacity by the assigned quantity
-                    if recipient["capacity"] == 0:
-                        sorted_Recipients.remove(recipient)
                     volunteer["max_pickups"] -= 1 #decrease the volunteer's remaining pickups by 1
-                    if volunteer["max_pickups"] == 0:
-                        sorted_Volunteers.remove(volunteer)
                     donation["quantity"] -= quantity #decrease the donation's remaining quantity by the assigned quantity
                     assigned = True
 
@@ -234,11 +244,20 @@ def assign(sort_type, sorted_Donations, sorted_Recipients, sorted_Volunteers):
                 break
         if donation["quantity"] > 0:
             if not rejection_reasons:
-                rejection_reasons.add("no feasible recipient and volunteer combination remains")
-            donation["status"] = (
-                "partially assigned" if donation["quantity"] < original_quantity else "unassigned"
-            )
-            donation["decision_reason"] = "; ".join(sorted(rejection_reasons))
+                rejection_reasons.add(f"no recipient and volunteer pair both serve the {donation['pickup_area']} pickup area")
+            because = "; ".join(sorted(rejection_reasons))
+            remaining = donation["quantity"]
+            if remaining < original_quantity:
+                donation["status"] = "partially assigned"
+                donation["decision_reason"] = (
+                    f"Donation {donation['donation_ID']} was only partially assigned: {original_quantity - remaining} of "
+                    f"{original_quantity} items were delivered, but the remaining {remaining} could not be assigned because {because}."
+                )
+            else:
+                donation["status"] = "unassigned"
+                donation["decision_reason"] = (
+                    f"Donation {donation['donation_ID']} ({original_quantity} items) could not be assigned because {because}."
+                )
             donation["priority_reason"] = priorities[donation["donation_ID"]]
             unmatched_donations.append(donation)
 
@@ -263,6 +282,16 @@ def calculate_and_display_results(assignments, unmatched_donations, label):
     donations_undelivered = sum(d["quantity"] for d in unmatched_donations)
 
     display_header(label + " Assignment Results")
+    if label == "FIFO":
+        print("Priority rule: donations are handled in order of ready time (first in, first out).")
+    else:
+        print("Priority rule: donations with the least shelf life are handled first (urgency-first greedy).")
+    print(
+        "Each donation goes to the first recipient (earliest closing) and volunteer (earliest available) that pass every check:\n"
+        "same pickup area, food type accepted, recipient capacity left, volunteer capacity and pickups left,\n"
+        "pickup within volunteer hours and before the recipient closes, and pickup before the food expires.\n"
+        "Pickup time is the later of the donation's ready time and the volunteer's start time.\n"
+    )
     print(
         f"Assigned {len(assignments)} donations for delivery with total quantity delivered: {donations_delivered}\n"
         f"{len(unmatched_donations)} donations were not assigned for delivery with {donations_undelivered} total quantity.\n"
