@@ -58,7 +58,7 @@ def clean_uploaded_data(file_path,choice):
     uploaded_file = upload_file(file_path)
     try:
         if choice == 1:
-            remove_duplicate_donations()
+            uploaded_file = remove_duplicate_donations(uploaded_file)
             for row in uploaded_file:
                 row["quantity"] = int(row["quantity"]) if row["quantity"] is not None else None
                 row["ready_time"] = datetime.strptime(row["ready_time"], "%H:%M") if row["ready_time"] is not None else None
@@ -297,17 +297,19 @@ def create_assignment():
             print("\n___FIFO and Greedy performed equally.___\n")
 
 
-def remove_duplicate_donations():
-    seen = set()
+def remove_duplicate_donations(rows): #keeps the first record for each donation ID, including IDs already loaded, and reports the rest
+    seen = set(Donations.keys())
+    unique_rows = []
     duplicates = []
-    for donation_id in list(Donations.keys()):
-        if donation_id in seen:
-            duplicates.append(donation_id)
-            del Donations[donation_id]
+    for row in rows:
+        if row["donation_ID"] in seen:
+            duplicates.append(row["donation_ID"])
         else:
-            seen.add(donation_id)
+            seen.add(row["donation_ID"])
+            unique_rows.append(row)
     if duplicates:
-        print(f"Removed duplicate donations: {duplicates}")
+        print(f"Removed duplicate donations (first record kept): {duplicates}")
+    return unique_rows
 
 def main():
     data_lists = {1: Donations, 2: Recipients, 3: Volunteers}
