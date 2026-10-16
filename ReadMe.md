@@ -127,11 +127,10 @@ to FIFO's 385.
  
 **Fairness and starvation.** Donations with long shelf lives are repeatedly deferred. 
 Under greedy a patient donation can sit at the back of the queue while every urgent donation ahead
-of it consumes capacity, and then find nothing left. Tt is starved precisely because it was in good condition. Our sample data
+of it consumes capacity, and then find nothing left. It is starved precisely because it was in good condition. Our sample data
 shows this: D-1002 (90 units, 240 minutes of shelf life) is fully delivered
 under FIFO and completely unassigned under greedy.
-`test_starved_donation_explains_deferral` covers this case directly, and every deferred donation carries a `priority_reason` saying which 
-donation displaced it and why.
+`test_starved_donation_explains_deferral` covers this case directly, and every deferred donation carries a `priority_reason` saying which donation displaced it and why.
 
 ## Limitations
  
@@ -164,14 +163,15 @@ a volunteer's pickups. So the number of passes across the whole run is bounded b
 **Dominant work:** the recipient × volunteer scan inside the matching loop.
 Every feasibility check is `O(1)` — dict lookups, set membership for food types,
 and integer/datetime comparisons
+
 ---
 
 
 
 ## Team Contributions:
-Jerry: Created the github repository and initial algorithms structures in the RR.py. Created the upload file logics and helper functions. Created the the terminal outputs interface.Made changes to algorithm and code after meeting.
+**Jerry:** Created the github repository and initial algorithms structures in the RR.py. Created the upload file logics and helper functions. Created the terminal outputs interface. Made changes to algorithm and code after meeting.
 
-Max:
+**Max:**
 
 
-Kristine: 
+**Kristine:** Testing the code. Offering feedback on what to change to improve output. Help with README and proofread.
