@@ -170,3 +170,8 @@ and integer/datetime comparisons
 
 ## Team Contributions:
 Jerry: Created the github repository and initial algorithms structures in the RR.py. Created the upload file logics and helper functions. Created the the terminal outputs interface.Made changes to algorithm and code after meeting.
+
+Max:
+
+
+Kristine: 
