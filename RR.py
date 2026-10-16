@@ -98,7 +98,7 @@ def display_options():
     print(f"\t2. Upload Recipient File")
     print(f"\t3. Upload Volunteer File")
     print(f"\t4. Create & View FIFO/Greedy Assignments")
-    print(f"\t6. Exit")
+    print(f"\t5. Exit")
     print(f'\n')
 
 def display_header(title):
@@ -357,7 +357,7 @@ def main():
                 print(f"\n{CHOICE[choice-1]} contains {len(data_lists[choice])} records.\n")
         elif choice == 4:
             create_assignment()
-        elif choice == 6:
+        elif choice == 5:
             break
         else:
             print("Invalid choice. Please try again.")
