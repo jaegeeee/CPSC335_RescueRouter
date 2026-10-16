@@ -171,7 +171,7 @@ and integer/datetime comparisons
 ## Team Contributions:
 **Jerry:** Created the github repository and initial algorithms structures in the RR.py. Created the upload file logics and helper functions. Created the terminal outputs interface. Made changes to algorithm and code after meeting.
 
-**Max:**
+**Max:** Created checker.py file. Made the demo video for the program, explaining it. Made some modifications to rr.py for explainability requirement. Created README file. 
 
 
 **Kristine:** Testing the code. Offering feedback on what to change to improve output. Help with README and proofread.
