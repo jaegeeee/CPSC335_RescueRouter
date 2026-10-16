@@ -145,6 +145,8 @@ donation displaced it and why.
 - **No global optimisation.** Both strategies are one-pass and never revisit a
   decision.
 - **No persistence.** Data lives in memory for the session only.
+- **Assumptions of timing.** We are running based off of the assumption that
+  we have all the data before the first delivery is initiated.
 
 ## Complexity
  
